@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero -->
+    <div class="text-center mb-12">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-brand-50 rounded-2xl mb-6">
+            <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">About Premier Auto</h1>
+        <p class="text-xl text-gray-500 max-w-2xl mx-auto">Your trusted destination for premium vehicles since 2010</p>
+    </div>
+
+    <!-- Story -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Story</h2>
+        <div class="prose prose-gray max-w-none">
+            <p class="text-gray-600 leading-relaxed mb-4">Premier Auto was founded with a simple vision: to make the car buying experience transparent, enjoyable, and stress-free. We believe everyone deserves access to quality vehicles at fair prices, backed by honest service and genuine care for our customers.</p>
+            <p class="text-gray-600 leading-relaxed mb-4">Over the years, we've grown from a small lot with a handful of cars to one of the region's most trusted dealerships. Our success isn't measured in sales alone, but in the thousands of satisfied customers who drive away with confidence and a smile.</p>
+            <p class="text-gray-600 leading-relaxed">Every vehicle in our inventory undergoes a rigorous multi-point inspection to ensure it meets our high standards for quality, safety, and reliability. We stand behind every car we sell because your trust is our most valuable asset.</p>
+        </div>
+    </div>
+
+    <!-- Values -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+            <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Quality Guaranteed</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Every vehicle is thoroughly inspected and certified before it hits our lot. We never compromise on quality or safety.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+            <div class="w-14 h-14 bg-brand-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Fair Pricing</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Transparent, competitive pricing with no hidden fees. What you see is what you get, every single time.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+            <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Customer First</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Your satisfaction is our top priority. From browsing to test drives to financing, we're with you every step of the way.</p>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="bg-gradient-to-r from-brand-600 to-brand-800 rounded-3xl p-8 md:p-12">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-white">{{ total_vehicles }}</p>
+                <p class="text-brand-200 text-sm mt-1">Vehicles Available</p>
+            </div>
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-white">{{ total_makes }}</p>
+                <p class="text-brand-200 text-sm mt-1">Top Brands</p>
+            </div>
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-white">15+</p>
+                <p class="text-brand-200 text-sm mt-1">Years Experience</p>
+            </div>
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-white">5K+</p>
+                <p class="text-brand-200 text-sm mt-1">Happy Customers</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

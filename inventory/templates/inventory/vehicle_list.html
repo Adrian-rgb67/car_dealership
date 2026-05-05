@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Browse Inventory</h1>
+            <p class="text-gray-500 mt-1">{{ total_results }} vehicles found</p>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'vehicle-create' %}" class="mt-4 md:mt-0 inline-flex items-center px-5 py-2.5 bg-brand-600 text-white font-semibold rounded-xl hover:bg-brand-700 shadow-sm hover:shadow transition-all">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Add Vehicle
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+        <form method="get" class="space-y-4">
+            <!-- Search Bar -->
+            <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                {{ search_form.search }}
+            </div>
+
+            <!-- Filter Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <div>{{ search_form.manufacturer }}</div>
+                <div>{{ search_form.body_type }}</div>
+                <div>{{ search_form.fuel_type }}</div>
+                <div>{{ search_form.condition }}</div>
+                <div>{{ search_form.price_from }}</div>
+                <div>{{ search_form.price_to }}</div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div>{{ search_form.year_from }}</div>
+                <div>{{ search_form.year_to }}</div>
+                <div>{{ search_form.sort_by }}</div>
+                <div class="flex gap-2">
+                    <button type="submit" class="flex-1 px-4 py-2 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-700 transition-colors">
+                        Search
+                    </button>
+                    <a href="{% url 'vehicle-list' %}" class="px-4 py-2 bg-gray-100 text-gray-600 font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                        Clear
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Vehicle Grid -->
+    {% if vehicles %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for vehicle in vehicles %}
+        <a href="{{ vehicle.get_absolute_url }}" class="vehicle-card group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+            <div class="relative overflow-hidden h-52">
+                {% if vehicle.image %}
+                <img src="{{ vehicle.image.url }}" alt="{{ vehicle.car_model }}" class="vehicle-image w-full h-full object-cover">
+                {% else %}
+                <div class="vehicle-image w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                </div>
+                {% endif %}
+                {% if vehicle.is_featured %}
+                <div class="absolute top-3 left-3 px-2.5 py-1 bg-amber-500 text-white text-xs font-bold rounded-lg shadow-md flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    Featured
+                </div>
+                {% endif %}
+                <div class="absolute top-3 right-3 px-2.5 py-1 {{ vehicle.status_badge_class }} text-xs font-bold rounded-lg shadow-sm">
+                    {{ vehicle.get_status_display }}
+                </div>
+                <!-- Quick condition badge -->
+                <div class="absolute bottom-3 left-3 px-2.5 py-1 bg-black/50 backdrop-blur text-white text-xs font-medium rounded-lg">
+                    {{ vehicle.get_condition_display }}
+                </div>
+            </div>
+            <div class="p-5">
+                <div class="mb-2">
+                    <p class="text-xs text-brand-600 font-semibold uppercase tracking-wider">{{ vehicle.car_model.manufacturer.name }}</p>
+                    <h3 class="text-lg font-bold text-gray-900 group-hover:text-brand-600 transition-colors">{{ vehicle.car_model.name }}</h3>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        {{ vehicle.car_model.year }}
+                    </span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        {{ vehicle.color }}
+                    </span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        {{ vehicle.formatted_mileage }} mi
+                    </span>
+                    {% if vehicle.car_model.transmission %}
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                        {{ vehicle.car_model.get_transmission_display }}
+                    </span>
+                    {% endif %}
+                </div>
+                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <span class="text-2xl font-extrabold text-brand-600">{{ vehicle.formatted_price }}</span>
+                    <span class="inline-flex items-center text-sm text-brand-600 font-medium group-hover:translate-x-1 transition-transform">
+                        View Details
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="flex justify-center mt-10 space-x-2">
+        {% if page_obj.has_previous %}
+        <a href="?page=1{% for key, val in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ val }}{% endif %}{% endfor %}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}{% for key, val in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ val }}{% endif %}{% endfor %}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Previous</a>
+        {% endif %}
+
+        <span class="px-4 py-2 text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% for key, val in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ val }}{% endif %}{% endfor %}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}{% for key, val in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ val }}{% endif %}{% endfor %}" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">Last</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-20">
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">No Vehicles Found</h3>
+        <p class="text-gray-500 mb-6">Try adjusting your search or filter criteria</p>
+        <a href="{% url 'vehicle-list' %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-brand-600 bg-brand-50 rounded-lg hover:bg-brand-100 transition-colors">
+            Clear Filters
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
